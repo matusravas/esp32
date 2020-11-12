@@ -1,1 +1,1 @@
-# esp32
+# ESP32 INMP441 MEMS microphone project
