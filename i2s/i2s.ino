@@ -17,9 +17,11 @@ void setup() {
 }
 
 void loop() {
-  int16_t sample = 0;
-  int bytes = i2s_pop_sample(I2S_PORT, (char*)&sample, portMAX_DELAY);
-  if(bytes > 0){
+  int16_t sample;
+  size_t bytes_read;
+
+  i2s_read(I2S_PORT, &sample, 2, &bytes_read, portMAX_DELAY); 
+  if(bytes_read > 0){
     Serial.println(sample);
   }
 }
@@ -27,10 +29,10 @@ void loop() {
 void i2s_install(){
   const i2s_config_t i2s_config = {
     .mode = i2s_mode_t(I2S_MODE_MASTER | I2S_MODE_RX),
-    .sample_rate = 44100,
+    .sample_rate = 8000,
     .bits_per_sample = i2s_bits_per_sample_t(16),
     .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,
-    .communication_format = i2s_comm_format_t(I2S_COMM_FORMAT_I2S | I2S_COMM_FORMAT_I2S_MSB),
+    .communication_format = i2s_comm_format_t(I2S_COMM_FORMAT_I2S | I2S_COMM_FORMAT_I2S_MSB), // I2S_COMM_FORMAT_STAND_MSB I2S communication MSB alignment standard, data launch at first BCK
     .intr_alloc_flags = 0, // default interrupt priority
     .dma_buf_count = 8,
     .dma_buf_len = 64,
